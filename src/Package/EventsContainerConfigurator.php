@@ -29,6 +29,7 @@ use Whoa\Events\Contracts\EventEmitterInterface;
 use Whoa\Events\Package\EventSettings as C;
 use Whoa\Events\SimpleEventEmitter;
 use Psr\Container\ContainerInterface as PsrContainerInterface;
+
 use function call_user_func;
 
 /**
@@ -37,17 +38,17 @@ use function call_user_func;
 class EventsContainerConfigurator implements ContainerConfiguratorInterface
 {
     /** @var callable */
-    const CONFIGURATOR = [self::class, self::CONTAINER_METHOD_NAME];
+    public const CONFIGURATOR = [self::class, self::CONTAINER_METHOD_NAME];
 
     /**
      * @inheritdoc
      */
     public static function configureContainer(WhoaContainerInterface $container): void
     {
-        $emitter            = null;
+        $emitter = null;
         $getOrCreateEmitter = function (PsrContainerInterface $container) use (&$emitter): SimpleEventEmitter {
             if ($emitter === null) {
-                $emitter   = new SimpleEventEmitter();
+                $emitter = new SimpleEventEmitter();
                 $cacheData = $container->get(SettingsProviderInterface::class)->get(C::class)[C::KEY_CACHED_DATA];
                 $emitter->setData($cacheData);
             }

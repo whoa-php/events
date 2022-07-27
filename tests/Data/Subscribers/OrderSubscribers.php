@@ -26,6 +26,7 @@ use Whoa\Tests\Events\Data\Events\BaseOrderEvent;
 use Whoa\Tests\Events\Data\Events\OrderCreatedEvent;
 use Whoa\Tests\Events\Data\Events\OrderEvent;
 use Whoa\Tests\Events\Data\Events\OrderUpdatedEvent;
+
 use function assert;
 
 /**
@@ -36,30 +37,30 @@ class OrderSubscribers implements EventHandlerInterface
     /**
      * @var bool
      */
-    private static $onOrder = false;
+    private static bool $onOrder = false;
 
     /**
      * @var bool
      */
-    private static $onBaseOrder = false;
+    private static bool $onBaseOrder = false;
 
     /**
      * @var bool
      */
-    private static $onOrderCreated = false;
+    private static bool $onOrderCreated = false;
 
     /**
      * @var bool
      */
-    private static $onOrderUpdated = false;
+    private static bool $onOrderUpdated = false;
 
     /**
      * @return void
      */
     public static function reset()
     {
-        static::$onOrder        = false;
-        static::$onBaseOrder    = false;
+        static::$onOrder = false;
+        static::$onBaseOrder = false;
         static::$onOrderCreated = false;
         static::$onOrderUpdated = false;
     }
@@ -77,7 +78,7 @@ class OrderSubscribers implements EventHandlerInterface
     /**
      * @return bool
      */
-    public static function isOnOrder()
+    public static function isOnOrder(): bool
     {
         return self::$onOrder;
     }

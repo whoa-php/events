@@ -29,6 +29,7 @@ use Whoa\Events\SimpleEventEmitter;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+
 use function assert;
 use function class_exists;
 use function class_implements;
@@ -47,9 +48,7 @@ abstract class EventSettings implements EventSettingsInterface
 
     /**
      * @param array $appConfig
-     *
      * @return array
-     *
      * @throws ReflectionException
      */
     final public function get(array $appConfig): array
@@ -76,15 +75,15 @@ abstract class EventSettings implements EventSettingsInterface
         $subscribersFileMask = $defaults[static::KEY_SUBSCRIBERS_FILE_MASK] ?? null;
         assert(empty($subscribersFileMask) === false, "Invalid Subscribers file mask `$subscribersFileMask`.");
 
-        $eventsPath      = $eventsFolder . DIRECTORY_SEPARATOR . $eventsFileMask;
+        $eventsPath = $eventsFolder . DIRECTORY_SEPARATOR . $eventsFileMask;
         $subscribersPath = $subscribersFolder . DIRECTORY_SEPARATOR . $subscribersFileMask;
 
         $emitter = new SimpleEventEmitter();
-        /** @noinspection PhpParamsInspection */
+
         $eventClasses = iterator_to_array(
             $this->selectClasses($eventsPath, EventInterface::class)
         );
-        /** @noinspection PhpParamsInspection */
+
         $handlerClasses = iterator_to_array(
             $this->selectClasses($subscribersPath, EventHandlerInterface::class)
         );
@@ -107,7 +106,7 @@ abstract class EventSettings implements EventSettingsInterface
     protected function getSettings(): array
     {
         return [
-            static::KEY_EVENTS_FILE_MASK      => '*.php',
+            static::KEY_EVENTS_FILE_MASK => '*.php',
             static::KEY_SUBSCRIBERS_FILE_MASK => '*.php',
         ];
     }
@@ -115,9 +114,7 @@ abstract class EventSettings implements EventSettingsInterface
     /**
      * @param iterable $eventClasses
      * @param iterable $handlerClasses
-     *
      * @return iterable
-     *
      * @throws ReflectionException
      */
     private function getEventSubscribers(iterable $eventClasses, iterable $handlerClasses): iterable
@@ -133,9 +130,7 @@ abstract class EventSettings implements EventSettingsInterface
 
     /**
      * @param string $handlerClass
-     *
      * @return iterable
-     *
      * @throws ReflectionException
      */
     private function selectEvenHandlers(string $handlerClass): iterable
@@ -151,11 +146,9 @@ abstract class EventSettings implements EventSettingsInterface
     }
 
     /**
-     * @param string   $eventClass
+     * @param string $eventClass
      * @param iterable $eventClasses
-     *
      * @return iterable
-     *
      * @throws ReflectionException
      */
     private function getChildEvents(string $eventClass, iterable $eventClasses): iterable
@@ -176,7 +169,6 @@ abstract class EventSettings implements EventSettingsInterface
 
     /**
      * @param iterable $eventClasses
-     *
      * @return array
      */
     private function getParentEvents(iterable $eventClasses): array
@@ -201,33 +193,26 @@ abstract class EventSettings implements EventSettingsInterface
 
     /**
      * @param ReflectionMethod $method
-     *
      * @return bool
      */
     private function isEventHandlerMethod(ReflectionMethod $method): bool
     {
-        $result =
-            $method->isPublic() === true &&
+        return $method->isPublic() === true &&
             $method->isStatic() === true &&
             count($params = $method->getParameters()) === 1 &&
             $params[0]->getClass()->implementsInterface(EventInterface::class) === true;
-
-        return $result;
     }
 
     /**
      * @param string $classOrInterface
-     *
      * @return bool
      */
     private function doesImplementEventInterface(string $classOrInterface): bool
     {
-        $isClass     = class_exists($classOrInterface, true);
+        $isClass = class_exists($classOrInterface, true);
         $isInterface = interface_exists($classOrInterface, true);
         assert($isClass xor $isInterface);
 
-        $isEvent = in_array(EventInterface::class, class_implements($classOrInterface));
-
-        return $isEvent;
+        return in_array(EventInterface::class, class_implements($classOrInterface));
     }
 }

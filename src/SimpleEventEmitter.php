@@ -28,6 +28,7 @@ use Whoa\Events\Contracts\EventInterface;
 use Whoa\Events\Exceptions\EventNotFoundException;
 use ReflectionException;
 use ReflectionMethod;
+
 use function assert;
 use function array_filter;
 use function array_key_exists;
@@ -45,20 +46,19 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 {
     /**
      * All events known to system with or without corresponding event handler.
-     *
      * @var array
      */
-    private $allowedEvents = [];
+    private array $allowedEvents = [];
 
     /**
      * @var array
      */
-    private $subscribers = [];
+    private array $subscribers = [];
 
     /**
      * @var bool
      */
-    private $cancellingEnabled = false;
+    private bool $cancellingEnabled = false;
 
     /**
      * @inheritdoc
@@ -80,7 +80,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param string $eventName
-     *
      * @return SimpleEventEmitter
      */
     public function addAllowedEvent(string $eventName): self
@@ -92,7 +91,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param string[] $eventNames
-     *
      * @return SimpleEventEmitter
      */
     public function addAllowedEvents(array $eventNames): self
@@ -105,12 +103,9 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
     }
 
     /**
-     * @param string   $eventName
+     * @param string $eventName
      * @param callable $subscriber
-     *
      * @return self
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     public function subscribe(string $eventName, callable $subscriber): self
     {
@@ -127,9 +122,8 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
     }
 
     /**
-     * @param string   $eventName
+     * @param string $eventName
      * @param callable $subscriber
-     *
      * @return self
      */
     public function unSubscribe(string $eventName, callable $subscriber): self
@@ -178,7 +172,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param array $data
-     *
      * @return self
      */
     public function setData(array $data): self
@@ -212,14 +205,11 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
             }
         }
 
-        $data = [$this->getAllowedEvents(), $subscribers];
-
-        return $data;
+        return [$this->getAllowedEvents(), $subscribers];
     }
 
     /**
      * @param string $eventName
-     *
      * @return bool
      */
     protected function isEventAllowed(string $eventName): bool
@@ -237,7 +227,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param array $allowedEvents
-     *
      * @return self
      */
     protected function setAllowedEvents(array $allowedEvents): self
@@ -257,7 +246,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param callable[] $subscribers
-     *
      * @return self
      */
     protected function setSubscribers(array $subscribers): self
@@ -269,8 +257,7 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param string $eventName
-     * @param array  $arguments
-     *
+     * @param array $arguments
      * @return void
      */
     protected function emitWithoutCancellingPropagationCheck(string $eventName, array $arguments = []): void
@@ -282,8 +269,7 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param string $eventName
-     * @param array  $arguments
-     *
+     * @param array $arguments
      * @return void
      */
     protected function emitWithCancellingPropagationCheck(string $eventName, array $arguments = []): void
@@ -297,7 +283,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param string $eventName
-     *
      * @return array
      */
     private function getEventSubscribers(string $eventName): array
@@ -306,13 +291,11 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
             throw new EventNotFoundException($eventName);
         }
 
-        $result = $this->getSubscribers()[$eventName] ?? [];
-
-        return $result;
+        return $this->getSubscribers()[$eventName] ?? [];
     }
 
     /**
-     * @param string     $eventName
+     * @param string $eventName
      * @param callable[] $eventSubscribers
      *
      * @return self
@@ -333,7 +316,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
      * ]
      *
      * @param array $subscribers
-     *
      * @return bool
      */
     private function checkAllSubscribersAreStatic(array $subscribers): bool
@@ -358,10 +340,7 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param $mightBeCallable
-     *
      * @return null|ReflectionMethod
-     *
-     * @SuppressWarnings(PHPMD.ElseExpression)
      */
     private function parseStaticMethod($mightBeCallable): ?ReflectionMethod
     {
@@ -391,7 +370,6 @@ class SimpleEventEmitter implements EventEmitterInterface, EventDispatcherInterf
 
     /**
      * @param ReflectionMethod $staticMethod
-     *
      * @return callable
      */
     private function getUnifiedStaticMethodRepresentation(ReflectionMethod $staticMethod): callable

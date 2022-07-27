@@ -28,7 +28,6 @@ interface EventDispatcherInterface
 {
     /**
      * @param EventInterface $event
-     *
      * @return void
      */
     public function dispatch(EventInterface $event): void;

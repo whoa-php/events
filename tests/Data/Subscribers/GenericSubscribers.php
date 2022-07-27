@@ -24,6 +24,7 @@ namespace Whoa\Tests\Events\Data\Subscribers;
 use Whoa\Events\Contracts\EventHandlerInterface;
 use Whoa\Tests\Events\Data\Events\CreatedEvent;
 use Whoa\Tests\Events\Data\Events\UpdatedEvent;
+
 use function assert;
 
 /**
@@ -34,12 +35,12 @@ class GenericSubscribers implements EventHandlerInterface
     /**
      * @var bool
      */
-    private static $onCreated = false;
+    private static bool $onCreated = false;
 
     /**
      * @var bool
      */
-    private static $onUpdated = false;
+    private static bool $onUpdated = false;
 
     /**
      * @return void
@@ -61,7 +62,7 @@ class GenericSubscribers implements EventHandlerInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public static function isOnCreated(): bool
     {
@@ -79,7 +80,7 @@ class GenericSubscribers implements EventHandlerInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public static function isOnUpdated(): bool
     {

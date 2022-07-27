@@ -21,6 +21,8 @@ declare(strict_types=1);
 
 namespace Whoa\Tests\Events;
 
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Whoa\Contracts\Application\ContainerConfiguratorInterface;
 use Whoa\Contracts\Container\ContainerInterface;
 use Whoa\Contracts\Settings\SettingsProviderInterface;
@@ -42,8 +44,9 @@ class ContainerConfiguratorTest extends TestCase
 {
     /**
      * Test provider.
-     *
      * @throws ReflectionException
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
     public function testEventProvider()
     {
@@ -62,9 +65,8 @@ class ContainerConfiguratorTest extends TestCase
 
     /**
      * @param ContainerInterface $container
-     * @param string             $settingsClass
-     * @param array              $settings
-     *
+     * @param string $settingsClass
+     * @param array $settings
      * @return self
      */
     private function addSettings(ContainerInterface $container, string $settingsClass, array $settings): self

@@ -21,6 +21,7 @@ declare(strict_types=1);
 
 namespace Whoa\Tests\Events;
 
+use Whoa\Contracts\Settings\Packages\EventSettingsInterface;
 use Whoa\Events\Exceptions\EventNotFoundException;
 use Whoa\Events\SimpleEventEmitter;
 use Whoa\Tests\Events\Data\Events\OrderCreatedEvent;
@@ -42,24 +43,23 @@ use ReflectionMethod;
 class SimpleEventEmitterTest extends TestCase
 {
     /** Method name */
-    const PUBLIC_STATIC_NAME = 'publicStaticHandler';
+    public const PUBLIC_STATIC_NAME = 'publicStaticHandler';
 
     /** Method name */
-    const PUBLIC_NON_STATIC_NAME = 'publicNonStaticHandler';
+    public const PUBLIC_NON_STATIC_NAME = 'publicNonStaticHandler';
 
     /**
      * @var bool
      */
-    private static $publicStaticCalled = false;
+    private static bool $publicStaticCalled = false;
 
     /**
      * @var bool
      */
-    private $publicNonStaticCalled = false;
+    private bool $publicNonStaticCalled = false;
 
     /**
      * Stub for public static handler.
-     *
      * @return bool
      */
     public static function publicStaticHandler(): bool
@@ -71,7 +71,6 @@ class SimpleEventEmitterTest extends TestCase
 
     /**
      * Stub for public static handler.
-     *
      * @return bool
      */
     public function publicNonStaticHandler(): bool
@@ -93,7 +92,6 @@ class SimpleEventEmitterTest extends TestCase
 
     /**
      * Test basic event operations.
-     *
      * @return void
      */
     public function testBasicSubUnSub()
@@ -134,7 +132,7 @@ class SimpleEventEmitterTest extends TestCase
     public function testCancellingPropagation()
     {
         $eventName = 'event1';
-        $emitter   = (new SimpleEventEmitter())->disableCancelling();
+        $emitter = (new SimpleEventEmitter())->disableCancelling();
         $emitter->subscribe($eventName, [self::class, self::PUBLIC_STATIC_NAME]);
         $emitter->subscribe($eventName, [$this, self::PUBLIC_NON_STATIC_NAME]);
 
@@ -156,7 +154,7 @@ class SimpleEventEmitterTest extends TestCase
     public function testCacheForStaticHandlers()
     {
         $eventName = 'event1';
-        $emitter1  = (new SimpleEventEmitter())->disableCancelling();
+        $emitter1 = (new SimpleEventEmitter())->disableCancelling();
         $emitter1->subscribe($eventName, [self::class, self::PUBLIC_STATIC_NAME]);
         $emitter1->subscribe($eventName, [$this, self::PUBLIC_NON_STATIC_NAME]);
         $emitter1->subscribe($eventName, self::class . '::' . self::PUBLIC_STATIC_NAME);
@@ -171,18 +169,17 @@ class SimpleEventEmitterTest extends TestCase
     }
 
     /**
-     * Test emitting non existing event should fail.
+     * Test emitting non-existing event should fail.
      */
     public function testEmitNonExistingEvent()
     {
-        $this->expectException(\Whoa\Events\Exceptions\EventNotFoundException::class);
+        $this->expectException(EventNotFoundException::class);
 
         (new SimpleEventEmitter())->emit('event1');
     }
 
     /**
      * Test invalid subscribers are handled correctly.
-     *
      * @throws ReflectionException
      */
     public function testCheckInvalidSubscribers1()
@@ -195,13 +192,12 @@ class SimpleEventEmitterTest extends TestCase
 
     /**
      * Test event dispatch.
-     *
      * @throws ReflectionException
      */
     public function testEventDispatch()
     {
         $appConfig = [];
-        $cacheData = (new EventSettings())->get($appConfig)[EventSettings::KEY_CACHED_DATA];
+        $cacheData = (new EventSettings())->get($appConfig)[EventSettingsInterface::KEY_CACHED_DATA];
 
         // it has 4 sections for each non-abstract event we have described
         $this->assertCount(2, $cacheData);
@@ -287,24 +283,20 @@ class SimpleEventEmitterTest extends TestCase
      */
     private function resetCalledFlags()
     {
-        static::$publicStaticCalled  = false;
+        static::$publicStaticCalled = false;
         $this->publicNonStaticCalled = false;
     }
 
     /**
      * @param array $subscribers
-     *
      * @return bool
-     *
      * @throws ReflectionException
      */
     private function callCheckSubscribers(array $subscribers): bool
     {
         $method = new ReflectionMethod(SimpleEventEmitter::class, 'checkAllSubscribersAreStatic');
         $method->setAccessible(true);
-        $result = $method->invoke(new SimpleEventEmitter(), $subscribers);
-
-        return $result;
+        return $method->invoke(new SimpleEventEmitter(), $subscribers);
     }
 
     /**

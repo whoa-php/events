@@ -35,7 +35,7 @@ class EventSettings extends \Whoa\Events\Package\EventSettings
     {
         return [
 
-                static::KEY_EVENTS_FOLDER      => implode(DIRECTORY_SEPARATOR, [__DIR__, 'Events']),
+                static::KEY_EVENTS_FOLDER => implode(DIRECTORY_SEPARATOR, [__DIR__, 'Events']),
                 static::KEY_SUBSCRIBERS_FOLDER => implode(DIRECTORY_SEPARATOR, [__DIR__, 'Subscribers']),
 
             ] + parent::getSettings();

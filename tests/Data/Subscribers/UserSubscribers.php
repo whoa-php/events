@@ -26,6 +26,7 @@ use Whoa\Tests\Events\Data\Events\BaseUserEvent;
 use Whoa\Tests\Events\Data\Events\UserCreatedEvent;
 use Whoa\Tests\Events\Data\Events\UserEvent;
 use Whoa\Tests\Events\Data\Events\UserUpdatedEvent;
+
 use function assert;
 
 /**
@@ -36,30 +37,30 @@ class UserSubscribers implements EventHandlerInterface
     /**
      * @var bool
      */
-    private static $onUser = false;
+    private static bool $onUser = false;
 
     /**
      * @var bool
      */
-    private static $onBaseUser = false;
+    private static bool $onBaseUser = false;
 
     /**
      * @var bool
      */
-    private static $onUserCreated = false;
+    private static bool $onUserCreated = false;
 
     /**
      * @var bool
      */
-    private static $onUserUpdated = false;
+    private static bool $onUserUpdated = false;
 
     /**
      * @return void
      */
     public static function reset()
     {
-        static::$onUser        = false;
-        static::$onBaseUser    = false;
+        static::$onUser = false;
+        static::$onBaseUser = false;
         static::$onUserCreated = false;
         static::$onUserUpdated = false;
     }
@@ -77,7 +78,7 @@ class UserSubscribers implements EventHandlerInterface
     /**
      * @return bool
      */
-    public static function isOnUser()
+    public static function isOnUser(): bool
     {
         return self::$onUser;
     }
